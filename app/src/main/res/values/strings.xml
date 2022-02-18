@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">BMI</string>
+    <string name="textMale">Male</string>
+    <string name="textFemale">Female</string>
+    <string name="textWeight">Weight</string>
+    <string name="textAge">Age</string>
+    <string name="textHeight">Height</string>
+    <string name="currentWeight">55</string>
+    <string name="currentAge">22</string>
+    <string name="currentHeight">170</string>
+    <string name="measureForHeight">cm</string>
+    <string name="calculateBMI">Calculate</string>
+    <string name="reCalculateBMI">ReCalculate</string>
+    <string name="bmiDisplay">55</string>
+    <string name="genderDisplay">Gender</string>
+    <string name="categoryBMI">Your BMI Category Is</string>
+    <string name="resultHeader">Result</string>
+    <string name="appTitle">BMI Calculator</string>
+</resources>
