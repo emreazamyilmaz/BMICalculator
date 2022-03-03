@@ -1,109 +1,122 @@
 package com.cotlus.bmi
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.*
-import androidx.core.content.ContextCompat
+import android.widget.SeekBar
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.cotlus.bmi.databinding.ActivityMainBinding
-private lateinit var binding: ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
-    var currentweight = 55
-    var currentage = 22
-    var currentprogress = 170
-    var intprogress = "170"
-    var typeofuser = "0"
+    private var intCurrentWeight = 55
+    private var intCurrentAge = 22
+    private var intCurrentProgress = 170
+    private var strProgress = "170"
+    private var strTypeOfuser = "0"
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
-        // Male Card
-        binding.male.setOnClickListener(){
-            binding.male.setBackgroundResource(R.drawable.male_female_focus)
-            binding.female.setBackgroundResource(R.drawable.male_female_normal)
-            typeofuser = "Male"
-        }
-
-        // Female Card
-        binding.female.setOnClickListener(){
-            binding.female.setBackgroundResource(R.drawable.male_female_focus)
-            binding.male.setBackgroundResource(R.drawable.male_female_normal)
-            typeofuser = "Female"
-        }
-
-        // SeekBar
-        binding.seekbarForHeight.setMax(300)
-        binding.seekbarForHeight.setProgress(170)
-        binding.seekbarForHeight.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                currentprogress = progress
-                binding.currentHeight.text = currentprogress.toString()
+        with(binding){
+            // Male Card
+            male.setOnClickListener {
+                male.setBackgroundResource(R.drawable.male_female_focus)
+                female.setBackgroundResource(R.drawable.male_female_normal)
+                strTypeOfuser = "Male"
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            // Female Card
+            female.setOnClickListener {
+                female.setBackgroundResource(R.drawable.male_female_focus)
+                male.setBackgroundResource(R.drawable.male_female_normal)
+                strTypeOfuser = "Female"
             }
 
-            override fun onStopTrackingTouch(p0: SeekBar?) {
+            // SeekBar
+            seekbarForHeight.max = 300
+            seekbarForHeight.progress = 170
+            seekbarForHeight.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    intCurrentProgress = progress
+                    currentHeight.text = intCurrentProgress.toString()
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(p0: SeekBar?) {
+                }
+            })
+
+            // Age
+            increaseAge.setOnClickListener {
+                intCurrentAge += 1
+                currentAge.text = intCurrentAge.toString()
             }
-        })
 
-        // Age
-        binding.increaseAge.setOnClickListener(){
-            currentage = currentage + 1
-            binding.currentAge.text = currentage.toString()
-        }
-
-        binding.decreaseAge.setOnClickListener(){
-            if (currentage > 0){
-                currentage = currentage - 1
-                binding.currentAge.text = currentage.toString()
-            } else {
-                currentage = 1
+            decreaseAge.setOnClickListener {
+                if (intCurrentAge > 0) {
+                    intCurrentAge -= 1
+                    currentAge.text = intCurrentAge.toString()
+                } else {
+                    intCurrentAge = 1
+                }
             }
-        }
 
-        // Weight
-        binding.increaseWeight.setOnClickListener(){
-            currentweight = currentweight + 1
-            binding.currentWeight.text = currentweight.toString()
-        }
-
-        binding.decreaseWeight.setOnClickListener(){
-            if (currentweight > 0){
-                currentweight = currentweight - 1
-                binding.currentWeight.text = currentweight.toString()
-            } else {
-                currentweight = 1
+            // Weight
+            increaseWeight.setOnClickListener {
+                intCurrentWeight += 1
+                currentWeight.text = intCurrentWeight.toString()
             }
-        }
 
-        // Button
-        binding.calculateBMI.setOnClickListener(){
-            if (typeofuser == "0"){
-                Toast.makeText(applicationContext, "Please select your gender", Toast.LENGTH_SHORT).show()
-            } else if (intprogress == "0"){
-                Toast.makeText(applicationContext, "Please select your height", Toast.LENGTH_SHORT).show()
-            } else if (currentage <= 0) {
-                Toast.makeText(applicationContext, "Age is incorrect", Toast.LENGTH_SHORT).show()
-            } else if (currentweight <= 0){
-                Toast.makeText(applicationContext, "Weight is incorrect", Toast.LENGTH_SHORT).show()
-            } else {
-                val intent = Intent(this, bmiactivity::class.java)
-                intent.putExtra("gender", typeofuser)
-                intent.putExtra("height", currentprogress.toString())
-                intent.putExtra("weight", currentweight.toString())
-                intent.putExtra("age", currentage.toString())
+            decreaseWeight.setOnClickListener {
+                if (intCurrentWeight > 0) {
+                    intCurrentWeight -= 1
+                    currentWeight.text = intCurrentWeight.toString()
+                } else {
+                    intCurrentWeight = 1
+                }
+            }
 
-
-
-                startActivity(intent)
-                finish()
+            // Button
+            calculateBMI.setOnClickListener {
+                when {
+                    strTypeOfuser == "0" -> Toast.makeText(
+                        applicationContext,
+                        "Please select your gender",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    strProgress == "0" -> Toast.makeText(
+                        applicationContext,
+                        "Please select your height",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    intCurrentAge <= 0 -> Toast.makeText(
+                        applicationContext,
+                        "Age is incorrect",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    intCurrentWeight <= 0 -> Toast.makeText(
+                        applicationContext,
+                        "Weight is incorrect",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    else -> {
+                        val intent = Intent(this@MainActivity, BmiActivity::class.java)
+                        intent.putExtra("gender", strTypeOfuser)
+                        intent.putExtra("height", intCurrentProgress.toString())
+                        intent.putExtra("weight", intCurrentWeight.toString())
+                        intent.putExtra("age", intCurrentAge.toString())
+                        startActivity(intent)
+                        finish()
+                    }
+                }
             }
         }
     }

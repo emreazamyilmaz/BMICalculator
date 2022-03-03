@@ -1,46 +1,43 @@
 package com.cotlus.bmi
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Html
-import android.widget.Button
-import android.widget.Toolbar
-import androidx.annotation.Nullable
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import com.cotlus.bmi.databinding.ActivityBmiactivityBinding
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
-private lateinit var binding: ActivityBmiactivityBinding
 
-class bmiactivity : AppCompatActivity() {
+class BmiActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityBmiactivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bmiactivity)
         binding = ActivityBmiactivityBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
         val resultImage = binding.resultImage
-        val height = intent.getStringExtra("height")
-        val weight = intent.getStringExtra("weight")
+        var floatHeight = 0.0f
+        var floatWeight = 0.0f
 
-        var intheight = height!!.toFloat()
-        val intweight = weight!!.toFloat()
-        intheight = intheight / 100
+        intent.getStringExtra("height")?.let {
+            floatHeight = it.toFloat()
+        }
 
-        val intbmi = intweight/(intheight*intheight)
+        intent.getStringExtra("weight")?.let {
+            floatWeight = it.toFloat()
+        }
+
+        floatHeight /= 100
+
+        val intbmi = floatWeight / (floatHeight * floatHeight)
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.CEILING
         val roundbmi = df.format(intbmi)
         val stringbmi = roundbmi.toString()
 
-
-        if (intbmi < 18.4){
+        if (intbmi < 18.4) {
             binding.categoryBMI.text = "Severe Thinness"
             resultImage.setImageResource(R.drawable.bad_result)
         } else if (intbmi < 24.9 && intbmi > 18.5) {
@@ -54,7 +51,7 @@ class bmiactivity : AppCompatActivity() {
         binding.genderDisplay.text = intent.getStringExtra("gender")
         binding.bmiDisplay.text = stringbmi
 
-        binding.reCalculateBMI.setOnClickListener(){
+        binding.reCalculateBMI.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
