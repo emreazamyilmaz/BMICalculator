@@ -37,24 +37,25 @@ class BmiActivity : AppCompatActivity() {
         val roundbmi = df.format(intbmi)
         val stringbmi = roundbmi.toString()
 
-        if (intbmi < 18.4) {
-            binding.categoryBMI.text = "Severe Thinness"
-            resultImage.setImageResource(R.drawable.bad_result)
-        } else if (intbmi < 24.9 && intbmi > 18.5) {
-            binding.categoryBMI.text = "Moderate Thinness"
-            resultImage.setImageResource(R.drawable.fine_result)
-        } else {
-            binding.categoryBMI.text = "Overweight"
-            resultImage.setImageResource(R.drawable.bad_result)
-        }
+        with(binding) {
+            if (intbmi < 18.4) {
+                categoryBMI.text = "Severe Thinness"
+                resultImage.setImageResource(R.drawable.bad_result)
+            } else if (intbmi < 24.9 && intbmi > 18.5) {
+                categoryBMI.text = "Moderate Thinness"
+                resultImage.setImageResource(R.drawable.fine_result)
+            } else {
+                categoryBMI.text = "Overweight"
+                resultImage.setImageResource(R.drawable.bad_result)
+            }
+            genderDisplay.text = intent.getStringExtra("gender")
+            bmiDisplay.text = stringbmi
 
-        binding.genderDisplay.text = intent.getStringExtra("gender")
-        binding.bmiDisplay.text = stringbmi
-
-        binding.reCalculateBMI.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+            reCalculateBMI.setOnClickListener {
+                val intent = Intent(this@BmiActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 }
